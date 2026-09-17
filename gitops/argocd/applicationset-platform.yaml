@@ -36,7 +36,7 @@ spec:
             valueFiles:
               - "$values/{{ .path.path }}/values.yaml"
 
-        - repoURL: https://github.com/V-hacksungboo/MoongCheap-Cloud.git
+        - repoURL: https://github.com/hacksungboo/MoongCheap-Cloud.git
           targetRevision: feat/monitoring-alert
           ref: values
 
