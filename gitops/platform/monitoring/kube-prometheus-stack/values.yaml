@@ -36,7 +36,8 @@ prometheus:
     nodeSelector:
       workload: backend-ai    
   service:
-    type: ClusterIP # LoadBalancer (on-premise 테스트 시)
+#    type: ClusterIP # LoadBalancer (on-premise 테스트 시)
+    type: LoadBalancer
     
 alertmanager:
   # 처음엔 꺼두고 나중에 알림 필요해지면 활성화해도 무방 (경량화 목적)
@@ -60,7 +61,8 @@ grafana:
       url: http://loki-gateway.monitoring.svc.cluster.local
       isDefault: false
   service:
-    type: ClusterIP # LoadBalancer (on-premise 테스트 시)
+#    type: ClusterIP # LoadBalancer (on-premise 테스트 시)
+    type: LoadBalancer    
   env:
     GF_PLUGINS_PREINSTALL_DISABLED: "true"
   dashboardProviders:
