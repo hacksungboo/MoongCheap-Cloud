@@ -12,9 +12,9 @@ spec:
 
   generators:
     - git:
-        repoURL: https://github.com/V-MoongCheap/MoongCheap-Cloud.git
+        repoURL: https://github.com/hacksungboo/MoongCheap-Cloud.git
         # 나중에 main으로 변경
-        revision: feat/gitops
+        revision: feat/monitoring-alert
         files:
           - path: gitops/platform/**/config.yaml
 
@@ -36,7 +36,7 @@ spec:
               - "$values/{{ .path.path }}/values.yaml"
 
         - repoURL: https://github.com/V-MoongCheap/MoongCheap-Cloud.git
-          targetRevision: feat/gitops
+          targetRevision: feat/monitoring-alert
           ref: values
 
       destination:

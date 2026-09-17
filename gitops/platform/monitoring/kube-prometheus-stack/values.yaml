@@ -28,7 +28,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: gp3
+#          storageClassName: gp3
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
@@ -48,6 +48,7 @@ grafana:
   persistence:
     enabled: true
     size: 5Gi
+#    storageClassName: gp3
   nodeSelector:
     workload: backend-ai
   additionalDataSources:
