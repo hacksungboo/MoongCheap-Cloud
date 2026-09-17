@@ -17,8 +17,8 @@ spec:
         revision: feat/monitoring-alert
         files:
 #          - path: gitops/platform/**/config.yaml
-          - path: gitops/platform/monitoring/config.yaml
-          - path: gitops/platform/observability/config.yaml          
+          - path: gitops/platform/monitoring/**/config.yaml
+          - path: gitops/platform/observability/**/config.yaml          
 
   template:
     metadata:
