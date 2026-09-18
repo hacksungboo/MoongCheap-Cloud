@@ -108,24 +108,24 @@ grafana:
         - orgId: 1
           name: moongcheap-discord
           template: |
-            {{ "{{" }} define "moongcheap.title" {{ "}}" }}
-            {{ "{{" }} if eq .Status "firing" {{ "}}" }}🔴 [FIRING:{{ "{{" }} len .Alerts.Firing {{ "}}" }}]{{ "{{" }} else {{ "}}" }}✅ [RESOLVED]{{ "{{" }} end {{ "}}" }} MoongCheap 알림
-            {{ "{{" }} end {{ "}}" }}
+            {{ `{{` }} define `moongcheap.title` {{ `}}` }}
+            {{ `{{` }} if eq .Status `firing` {{ `}}` }}🔴 [FIRING:{{ `{{` }} len .Alerts.Firing {{ `}}` }}]{{ `{{` }} else {{ `}}` }}✅ [RESOLVED]{{ `{{` }} end {{ `}}` }} MoongCheap 알림
+            {{ `{{` }} end {{ `}}` }}
 
-            {{ "{{" }} define "moongcheap.message" {{ "}}" }}
-            {{ "{{" }} range .Alerts.Firing {{ "}}" }}
-            🔴 **{{ "{{" }} .Labels.rulename {{ "}}" }}**  `{{ "{{" }} .Labels.severity {{ "}}" }}`
-            > {{ "{{" }} .Annotations.summary {{ "}}" }}
-            발생: {{ "{{" }} .StartsAt.Format "2006-01-02 15:04:05" {{ "}}" }}
-            [상세보기]({{ "{{" }} .GeneratorURL {{ "}}" }})
+            {{ `{{` }} define `moongcheap.message` {{ `}}` }}
+            {{ `{{` }} range .Alerts.Firing {{ `}}` }}
+            🔴 **{{ `{{` }} .Labels.rulename {{ `}}` }}** (심각도: {{ `{{` }} .Labels.severity {{ `}}` }})
+            {{ `{{` }} .Annotations.summary {{ `}}` }}
+            발생: {{ `{{` }} .StartsAt.Format `2006-01-02 15:04:05` {{ `}}` }}
+            상세보기: {{ `{{` }} .GeneratorURL {{ `}}` }}
 
-            {{ "{{" }} end {{ "}}" }}
-            {{ "{{" }} range .Alerts.Resolved {{ "}}" }}
-            ✅ **{{ "{{" }} .Labels.rulename {{ "}}" }}** 복구됨
-            {{ "{{" }} .StartsAt.Format "15:04:05" {{ "}}" }} ~ {{ "{{" }} .EndsAt.Format "15:04:05" {{ "}}" }}
+            {{ `{{` }} end {{ `}}` }}
+            {{ `{{` }} range .Alerts.Resolved {{ `}}` }}
+            ✅ **{{ `{{` }} .Labels.rulename {{ `}}` }}** 복구됨 ({{ `{{` }} .StartsAt.Format `15:04:05` {{ `}}` }} ~ {{ `{{` }} .EndsAt.Format `15:04:05` {{ `}}` }})
 
-            {{ "{{" }} end {{ "}}" }}
-            {{ "{{" }} end {{ "}}" }}
+            {{ `{{` }} end {{ `}}` }}
+            {{ `{{` }} end {{ `}}` }}
+
     contactpoints.yaml:
       apiVersion: 1
       contactPoints:
@@ -137,8 +137,8 @@ grafana:
               settings:
                 url: $__env{DISCORD_WEBHOOK_URL}
                 use_discord_username: true
-                title: '{{ "{{" }} template "moongcheap.title" . {{ "}}" }}'
-                message: '{{ "{{" }} template "moongcheap.message" . {{ "}}" }}'
+                title: '{{ `{{` }} template `moongcheap.title` . {{ `}}` }}'
+                message: '{{ `{{` }} template `moongcheap.message` . {{ `}}` }}'
 
     policies.yaml:
       apiVersion: 1
@@ -167,7 +167,7 @@ grafana:
               labels:
                 severity: critical
               annotations:
-                summary: '{{ "{{" }} $labels.namespace {{ "}}" }}/{{ "{{" }} $labels.pod {{ "}}" }} CrashLoopBackOff'
+                summary: '{{ `{{` }} $labels.namespace {{ `}}` }}/{{ `{{` }} $labels.pod {{ `}}` }} CrashLoopBackOff'
               data:
                 - refId: A
                   relativeTimeRange: { from: 300, to: 0 }
@@ -192,7 +192,7 @@ grafana:
               labels:
                 severity: critical
               annotations:
-                summary: 'Node {{ "{{" }} $labels.node {{ "}}" }} is NotReady'
+                summary: 'Node {{ `{{` }} $labels.node {{ `}}` }} is NotReady'
               data:
                 - refId: A
                   relativeTimeRange: { from: 300, to: 0 }
@@ -217,7 +217,7 @@ grafana:
               labels:
                 severity: warning
               annotations:
-                summary: '{{ "{{" }} $labels.instance {{ "}}" }} CPU 사용률 80% 초과'
+                summary: '{{ `{{` }} $labels.instance {{ `}}` }} CPU 사용률 80% 초과'
               data:
                 - refId: A
                   relativeTimeRange: { from: 300, to: 0 }
@@ -242,7 +242,7 @@ grafana:
               labels:
                 severity: warning
               annotations:
-                summary: '{{ "{{" }} $labels.instance {{ "}}" }} 메모리 사용률 80% 초과'
+                summary: '{{ `{{` }} $labels.instance {{ `}}` }} 메모리 사용률 80% 초과'
               data:
                 - refId: A
                   relativeTimeRange: { from: 300, to: 0 }
@@ -267,7 +267,7 @@ grafana:
               labels:
                 severity: warning
               annotations:
-                summary: 'PVC {{ "{{" }} $labels.namespace {{ "}}" }}/{{ "{{" }} $labels.persistentvolumeclaim {{ "}}" }} 사용량 80% 초과'
+                summary: 'PVC {{ `{{` }} $labels.namespace {{ `}}` }}/{{ `{{` }} $labels.persistentvolumeclaim {{ `}}` }} 사용량 80% 초과'
               data:
                 - refId: A
                   relativeTimeRange: { from: 300, to: 0 }
