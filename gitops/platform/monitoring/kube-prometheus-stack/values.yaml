@@ -92,9 +92,41 @@ grafana:
         revision: 2
         datasource: Loki
 
+
+  # 알림 Silence/Source 링크가 localhost 대신 실제 접속 주소로 나가게 함
+  # (AWS 배포 시 실제 도메인으로 교체 필요)
+  grafana.ini:
+    server:
+      root_url: http://172.16.8.31/
+
   envFromSecret: grafana-env-secret
 
   alerting:
+    templates.yaml:
+      apiVersion: 1
+      templates:
+        - orgId: 1
+          name: moongcheap-discord
+          template: |
+            {{ define "moongcheap.title" }}
+            {{ if eq .Status "firing" }}🔴 [FIRING:{{ len .Alerts.Firing }}]{{ else }}✅ [RESOLVED]{{ end }} MoongCheap 알림
+            {{ end }}
+
+            {{ define "moongcheap.message" }}
+            {{ range .Alerts.Firing }}
+            🔴 **{{ .Labels.rulename }}**  `{{ .Labels.severity }}`
+            > {{ .Annotations.summary }}
+            발생: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+            [상세보기]({{ .GeneratorURL }})
+
+            {{ end }}
+            {{ range .Alerts.Resolved }}
+            ✅ **{{ .Labels.rulename }}** 복구됨
+            {{ .StartsAt.Format "15:04:05" }} ~ {{ .EndsAt.Format "15:04:05" }}
+
+            {{ end }}
+            {{ end }}
+
     contactpoints.yaml:
       apiVersion: 1
       contactPoints:
@@ -106,6 +138,8 @@ grafana:
               settings:
                 url: $__env{DISCORD_WEBHOOK_URL}
                 use_discord_username: true
+                title: '{{ template "moongcheap.title" . }}'
+                message: '{{ template "moongcheap.message" . }}'
 
     policies.yaml:
       apiVersion: 1
@@ -129,6 +163,7 @@ grafana:
             - uid: pod-crashloopbackoff
               title: "Pod CrashLoopBackOff"
               condition: C
+              noDataState: OK   # 크래시루프 파드가 없으면 데이터가 원래 없는 게 정상
               for: 5m
               labels:
                 severity: critical
@@ -164,7 +199,7 @@ grafana:
                   relativeTimeRange: { from: 300, to: 0 }
                   datasourceUid: prometheus
                   model:
-                    expr: kube_node_status_condition{condition="Ready", status="true"} == 0
+                    expr: kube_node_status_condition{condition="Ready", status="true"}
                     instant: true
                     refId: A
                 - refId: C
@@ -173,7 +208,7 @@ grafana:
                     type: threshold
                     expression: A
                     conditions:
-                      - evaluator: { type: gt, params: [0] }
+                      - evaluator: { type: lt, params: [1] }
                     refId: C
 
             - uid: host-cpu-high
