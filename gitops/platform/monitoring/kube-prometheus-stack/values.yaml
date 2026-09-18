@@ -65,6 +65,7 @@ grafana:
     type: LoadBalancer    
   env:
     GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    TZ: "Asia/Seoul"
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
@@ -104,6 +105,8 @@ grafana:
   alerting:
     templates.yaml:
       apiVersion: 1
+    templates.yaml:
+      apiVersion: 1
       templates:
         - orgId: 1
           name: moongcheap-discord
@@ -116,12 +119,12 @@ grafana:
             {{ `{{` }} range .Alerts.Firing {{ `}}` }}
             🔴 **{{ `{{` }} .Labels.alertname {{ `}}` }}** (심각도: {{ `{{` }} .Labels.severity {{ `}}` }})
             {{ `{{` }} .Annotations.summary {{ `}}` }}
-            발생: {{ `{{` }} .StartsAt.Format `2006-01-02 15:04:05` {{ `}}` }}
+            발생: {{ `{{` }} .StartsAt.Local.Format `2006-01-02 15:04:05` {{ `}}` }} KST
             상세보기: {{ `{{` }} .GeneratorURL {{ `}}` }}
 
             {{ `{{` }} end {{ `}}` }}
             {{ `{{` }} range .Alerts.Resolved {{ `}}` }}
-            ✅ **{{ `{{` }} .Labels.alertname {{ `}}` }}** 복구됨 ({{ `{{` }} .StartsAt.Format `15:04:05` {{ `}}` }} ~ {{ `{{` }} .EndsAt.Format `15:04:05` {{ `}}` }})
+            ✅ **{{ `{{` }} .Labels.alertname {{ `}}` }}** 복구됨 ({{ `{{` }} .StartsAt.Local.Format `15:04:05` {{ `}}` }} ~ {{ `{{` }} .EndsAt.Local.Format `15:04:05` {{ `}}` }} KST)
 
             {{ `{{` }} end {{ `}}` }}
             {{ `{{` }} end {{ `}}` }}
@@ -233,7 +236,7 @@ grafana:
                     type: threshold
                     expression: A
                     conditions:
-                      - evaluator: { type: gt, params: [80] }
+                      - evaluator: { type: gt, params: [1] }
                     refId: C
 
             - uid: host-mem-high
