@@ -217,7 +217,8 @@ grafana:
             - uid: host-cpu-high
               title: "CPU 사용률 임계치 초과"
               condition: C
-              for: 10m
+              #for: 10m
+              for: 30s # 테스트용
               labels:
                 severity: warning
               annotations:
