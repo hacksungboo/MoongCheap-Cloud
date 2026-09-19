@@ -1,0 +1,13 @@
+# envoyproxy.yaml
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: moongcheap-envoy
+  namespace: infra
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: ClusterIP        # D-24 — ALB/NLB 없음
+        name: moongcheap-envoy # cloudflared가 가리킬 고정 이름 [필드 지원 확인 필요]

@@ -19,7 +19,7 @@ spec:
 #          - path: gitops/platform/**/config.yaml
           - path: gitops/platform/monitoring/**/config.yaml
           - path: gitops/platform/observability/**/config.yaml          
-
+          - path: gitops/platform/envoy-gateway/**/config.yaml
   template:
     metadata:
       name: "{{ .name }}"

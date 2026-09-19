@@ -1,0 +1,16 @@
+# grafana-httproute.yaml — ccmall 테스트 전용, 나중에 실제 저장소엔 도메인 바꿔서 반영
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-ccmall-test
+  namespace: monitoring
+spec:
+  parentRefs:
+    - name: moongcheap-gateway
+      namespace: infra
+  hostnames:
+    - "grafana.ccmall.shop"
+  rules:
+    - backendRefs:
+        - name: kube-prometheus-stack-grafana   # kubectl get svc -n monitoring 으로 실제 이름 확인
+          port: 80

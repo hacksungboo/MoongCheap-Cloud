@@ -1,0 +1,7 @@
+name: envoy-gateway
+namespace: infra
+
+helm:
+  repoURL: docker.io/envoyproxy   # Karpenter(public.ecr.aws/karpenter)와 같은 방식 — oci:// 접두어 없이
+  chart: gateway-helm
+  version: "v1.9.1"               # Gateway API CRD가 chart에 동봉됨. K8s 버전 호환 확인 후 고정

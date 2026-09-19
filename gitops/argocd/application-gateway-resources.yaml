@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway-resources
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"   # envoy-gateway(chart+CRD, wave 0)보다 뒤에 sync
+spec:
+  project: moongcheap-platform
+
+  source:
+#    repoURL: https://github.com/V-MoongCheap/MoongCheap-Cloud.git
+    repoURL: https://github.com/hacksungboo/MoongCheap-Cloud.git
+#    targetRevision: develop
+    targetRevision: feat/monitoring-alert
+
+    path: gitops/platform/envoy-gateway/resources
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: infra
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

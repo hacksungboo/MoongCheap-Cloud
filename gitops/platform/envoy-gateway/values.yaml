@@ -1,0 +1,8 @@
+deployment:
+  envoyGateway:
+    resources:
+      requests: { cpu: 100m, memory: 256Mi }
+      limits:   { cpu: 500m, memory: 512Mi }
+  replicas: 1
+  # EKS에서는 여기에 pod.nodeSelector: { workload: system } 추가 (팀 문서 §2.2)
+  # 로컬 클러스터엔 해당 노드 라벨이 없으니 생략
