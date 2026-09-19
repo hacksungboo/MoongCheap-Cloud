@@ -7,6 +7,8 @@ deployment:
   # EKS에서는 여기에 pod.nodeSelector: { workload: system } 추가 (팀 문서 §2.2)
   # 로컬 클러스터엔 해당 노드 라벨이 없으니 생략
 
+
+crds:
   gatewayAPI:
-  safeUpgradePolicy:
-    enabled: false   # K8s 1.30 미만 클러스터에선 admissionregistration.k8s.io/v1 VAP가 없어서 sync 실패함
+    safeUpgradePolicy:
+      enabled: false   # K8s 1.30 미만이라 admissionregistration.k8s.io/v1 VAP 미지원 — crds 서브차트 값이라 crds: 로 감싸야 함
